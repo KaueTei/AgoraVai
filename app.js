@@ -20,8 +20,10 @@ db.once('open', function() {
 
 // Definindo o esquema do modelo
 const CarCrashSchema = new mongoose.Schema({
-  date: { type: Date, default: Date.now }
+  date: { type: Date, default: Date.now },
+  distance_cm: Number // Adicionando o campo para armazenar a distância medida
 });
+
 const CarCrash = mongoose.model('CarCrash', CarCrashSchema);
 
 // Rota para lidar com a solicitação POST do ESP8266
