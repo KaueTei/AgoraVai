@@ -11,7 +11,8 @@ const port = process.env.PORT || 3000;
 app.use(bodyParser.json());
 
 // Conectando ao banco de dados MongoDB
-mongoose.connect('mongodb://<username>:<password>@<hostname>:<port>/<database>', { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect('mongodb+srv://<username>:<password>@agoravaimesmodb.5mkrmuf.mongodb.net/?retryWrites=true&w=majority&appName=AgoraVaiMesmoDB', { useNewUrlParser: true, useUnifiedTopology: true });
+
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'Erro de conexão com o MongoDB:'));
 db.once('open', function() {
