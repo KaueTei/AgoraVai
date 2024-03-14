@@ -29,19 +29,31 @@ const CarCrash = mongoose.model('CarCrash', CarCrashSchema);
 // Rota para lidar com a solicitação POST do ESP8266
 app.post('/crash', async (req, res) => {
   try {
-    // Criar uma nova instância do modelo CarCrash
-    const newCrash = new CarCrash();
-    // Salvar no banco de dados
+    // Verifica se há dados no corpo da solicitação
+    if (!req.body.distance_cm) {
+      console.error('Dados de distância não fornecidos.');
+      return res.status(400).send('Dados de distância não fornecidos.');
+    }
+
+    // Obtém a distância do corpo da solicitação
+    const distance_cm = req.body.distance_cm;
+
+    // Cria uma nova instância do modelo CarCrash com a distância fornecida
+    const newCrash = new CarCrash({ distance_cm });
+
+    // Salva no banco de dados
     await newCrash.save();
     console.log('Dados do acidente salvos no banco de dados.');
-    // Enviar resposta 200 (OK) de volta para o ESP8266
+
+    // Envia resposta 200 (OK) de volta para o ESP8266
     res.sendStatus(200);
   } catch (error) {
     console.error('Erro ao salvar os dados do acidente no banco de dados:', error);
-    // Enviar resposta 500 (Erro interno do servidor) de volta para o ESP8266 em caso de erro
+    // Envia resposta 500 (Erro interno do servidor) de volta para o ESP8266 em caso de erro
     res.sendStatus(500);
   }
 });
+
 
 // Rota para obter a distância medida pelo ESP8266
 app.get('/distance', async (req, res) => {
