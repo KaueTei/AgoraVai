@@ -34,7 +34,6 @@ app.post('/crash', async (req, res) => {
       console.error('Dados de distância não fornecidos.');
       return res.status(400).send('Dados de distância não fornecidos.');
     }
-
     // Obtém a distância do corpo da solicitação
     const distance_cm = req.body.distance_cm;
 
@@ -53,27 +52,6 @@ app.post('/crash', async (req, res) => {
     res.sendStatus(500);
   }
 });
-
-
-// Rota para obter a distância medida pelo ESP8266
-app.get('/distance', async (req, res) => {
-  try {
-    // Consultar o último registro no banco de dados
-    const latestCrash = await CarCrash.findOne().sort({ date: -1 }).exec();
-    if (!latestCrash) {
-      // Se não houver registro, enviar resposta 404 (Não encontrado)
-      res.sendStatus(404);
-      return;
-    }
-    // Enviar a distância medida como resposta
-    res.json({ distance_cm: latestCrash.distance_cm });
-  } catch (error) {
-    console.error('Erro ao consultar a distância no banco de dados:', error);
-    // Enviar resposta 500 (Erro interno do servidor) em caso de erro
-    res.sendStatus(500);
-  }
-});
-
 
 // Iniciar o servidor
 app.listen(port, () => {
