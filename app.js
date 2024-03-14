@@ -53,6 +53,27 @@ app.post('/crash', async (req, res) => {
   }
 });
 
+
+// Rota para obter a distância medida pelo ESP8266
+app.get('/distance', async (req, res) => {
+  try {
+    // Consultar o último registro no banco de dados
+    const latestCrash = await CarCrash.findOne().sort({ date: -1 }).exec();
+    if (!latestCrash) {
+      // Se não houver registro, enviar resposta 404 (Não encontrado)
+      res.sendStatus(404);
+      return;
+    }
+    // Enviar a distância medida como resposta
+    res.json({ distance_cm: latestCrash.distance_cm });
+  } catch (error) {
+    console.error('Erro ao consultar a distância no banco de dados:', error);
+    // Enviar resposta 500 (Erro interno do servidor) em caso de erro
+    res.sendStatus(500);
+  }
+});
+
+
 // Iniciar o servidor
 app.listen(port, () => {
   console.log(`Servidor rodando na porta ${port}`);
